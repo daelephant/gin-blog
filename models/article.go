@@ -44,12 +44,14 @@ func GetArticleTotal(maps interface {}) (count int){
 }
 
 func GetArticles(pageNum int, pageSize int, maps interface {}) (articles []Article) {
+	//主表为当前articles表获取数据集 使用preload
 	db.Preload("Tag").Where(maps).Offset(pageNum).Limit(pageSize).Find(&articles)
 
 	return
 }
 
 func GetArticle(id int) (article Article) {
+	//主表为当前表，获取单条数据关联的表数据，使用related
 	db.Where("id = ?", id).First(&article)
 	db.Model(&article).Related(&article.Tag)
 
